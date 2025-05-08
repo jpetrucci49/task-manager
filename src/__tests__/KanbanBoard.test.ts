@@ -41,4 +41,12 @@ describe('KanbanBoard', () => {
   it('should return an empty task list initially', () => {
     expect(board.getTasks()).toEqual([]);
   });
+
+  it('should update task status and reflect in getTasks', () => {
+    board.addTask(task1);
+    board.moveTask('1', 'in-progress');
+    expect(board.getTasks()[0].status).toBe('in-progress');
+    board.moveTask('1', 'done');
+    expect(board.getTasks()[0].status).toBe('done');
+  });
 });
