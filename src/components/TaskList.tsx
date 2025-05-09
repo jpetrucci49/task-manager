@@ -33,6 +33,15 @@ const TaskList: React.FC = () => {
     }
   };
 
+  const handleDeleteTask = (taskId: string) => {
+    board.removeTask(taskId);
+    const newBoard = new KanbanBoard();
+    board.getTasks().forEach(task => {
+      newBoard.addTask(new Task(task.id, task.title, task.status));
+    });
+    setBoard(newBoard);
+  };
+
   return (
     <div>
       <h2>Tasks</h2>
@@ -68,6 +77,7 @@ const TaskList: React.FC = () => {
               >
                 Done
               </button>
+              <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
             </div>
           </li>
         ))}

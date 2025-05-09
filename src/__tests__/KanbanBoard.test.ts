@@ -57,4 +57,12 @@ describe('KanbanBoard', () => {
     expect(board.getTasks()[0].id).toBe('3');
     expect(board.getTasks()[1].id).toBe('4');
   });
+
+  it('should remove a task by ID', () => {
+    board.addTask(task1);
+    board.addTask(task2);
+    board.removeTask('1');
+    expect(board.getTasks()).toHaveLength(1);
+    expect(board.getTasks()[0].id).toBe('2');
+  });
 });
