@@ -7,7 +7,31 @@ h1 {
   color: #333;
 }
 
+h2 {
+  color: #555;
+}
+
 li {
   padding: 10px;
   border-bottom: 1px solid #ccc;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+input {
+  padding: 5px;
+  margin-right: 10px;
 }
