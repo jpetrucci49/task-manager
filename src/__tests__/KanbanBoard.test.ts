@@ -49,4 +49,12 @@ describe('KanbanBoard', () => {
     board.moveTask('1', 'done');
     expect(board.getTasks()[0].status).toBe('done');
   });
+
+  it('should add new tasks with unique IDs', () => {
+    board.addTask(new Task('3', 'New Task', 'todo'));
+    board.addTask(new Task('4', 'Another Task', 'todo'));
+    expect(board.getTasks()).toHaveLength(2);
+    expect(board.getTasks()[0].id).toBe('3');
+    expect(board.getTasks()[1].id).toBe('4');
+  });
 });

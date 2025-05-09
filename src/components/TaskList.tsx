@@ -9,20 +9,42 @@ const TaskList: React.FC = () => {
     board.addTask(new Task('2', 'Build Task Manager', 'in-progress'));
     return board;
   });
+  const [newTaskTitle, setNewTaskTitle] = useState('');
 
   const handleStatusChange = (taskId: string, newStatus: string) => {
     board.moveTask(taskId, newStatus);
-    // Create a new KanbanBoard instance with updated tasks
     const newBoard = new KanbanBoard();
     board.getTasks().forEach(task => {
       newBoard.addTask(new Task(task.id, task.title, task.status));
     });
-    setBoard(newBoard); // Trigger re-render with new instance
+    setBoard(newBoard);
+  };
+
+  const handleAddTask = () => {
+    if (newTaskTitle.trim()) {
+      const newTask = new Task(Date.now().toString(), newTaskTitle, 'todo');
+      board.addTask(newTask);
+      const newBoard = new KanbanBoard();
+      board.getTasks().forEach(task => {
+        newBoard.addTask(new Task(task.id, task.title, task.status));
+      });
+      setBoard(newBoard);
+      setNewTaskTitle('');
+    }
   };
 
   return (
     <div>
       <h2>Tasks</h2>
+      <div>
+        <input
+          type="text"
+          value={newTaskTitle}
+          onChange={e => setNewTaskTitle(e.target.value)}
+          placeholder="Enter task title"
+        />
+        <button onClick={handleAddTask}>Add Task</button>
+      </div>
       <ul>
         {board.getTasks().map(task => (
           <li key={task.id}>
