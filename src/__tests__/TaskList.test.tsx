@@ -2,14 +2,15 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import TaskList from '../components/TaskList';
 
 describe('TaskList', () => {
-  it('should render initial tasks with status and delete buttons', () => {
+  it('should render initial tasks with status, delete buttons, and filter dropdown', () => {
     render(<TaskList />);
     expect(screen.getByText('Master OOP Principles (todo)')).toBeInTheDocument();
     expect(screen.getByText('Build Task Manager (in-progress)')).toBeInTheDocument();
-    expect(screen.getAllByText(/To Do/i)).toHaveLength(2);
-    expect(screen.getAllByText(/In Progress/i)).toHaveLength(2);
-    expect(screen.getAllByText(/Done/i)).toHaveLength(2);
-    expect(screen.getAllByRole('button', { name: /delete/i })).toHaveLength(2); // One per task
+    expect(screen.getAllByRole('button', { name: /To Do/i })).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: /In Progress/i })).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: /Done/i })).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: /delete/i })).toHaveLength(2);
+    expect(screen.getByRole('combobox', { name: /filter by status/i })).toBeInTheDocument();
   });
 
   it('should render input field and add task button', () => {
@@ -47,10 +48,30 @@ describe('TaskList', () => {
     const taskText = 'Master OOP Principles (todo)';
     expect(screen.getByText(taskText)).toBeInTheDocument();
 
-    const deleteButton = screen.getAllByRole('button', { name: /delete/i })[0]; // First task’s delete button
+    const deleteButton = screen.getAllByRole('button', { name: /delete/i })[0];
     fireEvent.click(deleteButton);
 
     expect(screen.queryByText(taskText)).not.toBeInTheDocument();
-    expect(screen.getAllByRole('button', { name: /delete/i })).toHaveLength(1); // One task remains
+    expect(screen.getAllByRole('button', { name: /delete/i })).toHaveLength(1);
+  });
+
+  it('should filter tasks by status when dropdown is changed', () => {
+    render(<TaskList />);
+    const filterDropdown = screen.getByRole('combobox', { name: /filter by status/i });
+
+    // Show only "todo" tasks
+    fireEvent.change(filterDropdown, { target: { value: 'todo' } });
+    expect(screen.getByText('Master OOP Principles (todo)')).toBeInTheDocument();
+    expect(screen.queryByText('Build Task Manager (in-progress)')).not.toBeInTheDocument();
+
+    // Show only "in-progress" tasks
+    fireEvent.change(filterDropdown, { target: { value: 'in-progress' } });
+    expect(screen.getByText('Build Task Manager (in-progress)')).toBeInTheDocument();
+    expect(screen.queryByText('Master OOP Principles (todo)')).not.toBeInTheDocument();
+
+    // Show all tasks
+    fireEvent.change(filterDropdown, { target: { value: 'all' } });
+    expect(screen.getByText('Master OOP Principles (todo)')).toBeInTheDocument();
+    expect(screen.getByText('Build Task Manager (in-progress)')).toBeInTheDocument();
   });
 });

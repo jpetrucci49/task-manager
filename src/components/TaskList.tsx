@@ -10,6 +10,7 @@ const TaskList: React.FC = () => {
     return board;
   });
   const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
 
   const handleStatusChange = (taskId: string, newStatus: string) => {
     board.moveTask(taskId, newStatus);
@@ -54,8 +55,21 @@ const TaskList: React.FC = () => {
         />
         <button onClick={handleAddTask}>Add Task</button>
       </div>
+      <div>
+        <label htmlFor="filter-status">Filter by Status: </label>
+        <select
+          id="filter-status"
+          value={filterStatus}
+          onChange={e => setFilterStatus(e.target.value)}
+        >
+          <option value="all">All</option>
+          <option value="todo">To Do</option>
+          <option value="in-progress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
       <ul>
-        {board.getTasks().map(task => (
+        {board.getTasksByStatus(filterStatus).map(task => (
           <li key={task.id}>
             {task.title} ({task.status})
             <div>

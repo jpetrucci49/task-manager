@@ -65,4 +65,18 @@ describe('KanbanBoard', () => {
     expect(board.getTasks()).toHaveLength(1);
     expect(board.getTasks()[0].id).toBe('2');
   });
+
+  it('should filter tasks by status', () => {
+    board.addTask(task1); // todo
+    board.addTask(task2); // in-progress
+    board.addTask(new Task('3', 'Task 3', 'done'));
+
+    expect(board.getTasksByStatus('todo')).toHaveLength(1);
+    expect(board.getTasksByStatus('todo')[0].id).toBe('1');
+    expect(board.getTasksByStatus('in-progress')).toHaveLength(1);
+    expect(board.getTasksByStatus('in-progress')[0].id).toBe('2');
+    expect(board.getTasksByStatus('done')).toHaveLength(1);
+    expect(board.getTasksByStatus('done')[0].id).toBe('3');
+    expect(board.getTasksByStatus('all')).toHaveLength(3);
+  });
 });

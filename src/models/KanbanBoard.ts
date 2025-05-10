@@ -26,4 +26,13 @@ export class KanbanBoard implements Board {
     getTasks(): { id: string; title: string; status: string }[] {
       return this.tasks.map(task => task.getDetails());
     }
+  
+    getTasksByStatus(status: string): { id: string; title: string; status: string }[] {
+      if (status === 'all') {
+        return this.getTasks();
+      }
+      return this.tasks
+        .filter(task => task.getDetails().status === status)
+        .map(task => task.getDetails());
+    }
   }
