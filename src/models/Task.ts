@@ -16,4 +16,10 @@ export class Task {
     updateStatus(newStatus: string) {
       this.#status = newStatus;
     }
+
+    updateTitle(newTitle: string) {
+      if (newTitle.trim()) {
+        this.#title = newTitle;
+      }
+    }
   }
